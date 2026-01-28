@@ -39,7 +39,7 @@ app.get("/", (_, res) => {
         message: 'Document Extractor POC API',
         version: '1.0.0',
         endpoints: {
-            health: '/api/documents/health',
+            health: 'GET /api/documents/health',
             extract: 'POST /api/documents/extract'
         }
     })
