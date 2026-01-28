@@ -18,7 +18,7 @@ class DocumentController {
 
             const extractedData = await this.documentService.processDocument(req.file.path)
 
-            req.status(200).json({
+            res.status(200).json({
                 success: true,
                 data: extractedData
             })
@@ -26,7 +26,7 @@ class DocumentController {
         } catch (error) {
             console.log('Error processing document:', error)
 
-            req.status(500).json({
+            res.status(500).json({
                 erro: 'Internal Server Error',
                 message: error?.message || 'Failed to process document'
             })

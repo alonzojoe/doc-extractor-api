@@ -5,7 +5,7 @@ const config = require("../config")
 
 const storage = multer.diskStorage({
     destination: (_, file, cb) => {
-        cb(null, '/uploads')
+        cb(null, './uploads/')
     },
     filename: (_, file, cb) => {
         const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`
