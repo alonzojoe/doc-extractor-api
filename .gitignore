@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Environment variables (ignore real ones)
+.env
+.env.production
+.env.local
+
+# Allow example env file
+!.env.example
+
+# Uploads directory
+uploads/*
+!uploads/.gitkeep
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
