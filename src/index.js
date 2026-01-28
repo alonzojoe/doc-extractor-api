@@ -58,11 +58,23 @@ app.use((err, req, res, next) => {
     console.log('Error: ', err)
 
     if (err.message.includes('File too large')) {
-        return res.status(413).json({
+      return res.status(413).json({
         error: 'Payload Too Large',
         message: 'File size exceeds the maximum allowed size'
-        });
+      });
     }
+
+    if (err.message.includes('Invalid file type')) {
+      return res.status(400).json({
+        error: 'Bad Request',
+        message: err.message
+      });
+    }
+
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: err.message || 'Something went wrong'
+    });
 })
 
 app.listen(PORT, () => {
