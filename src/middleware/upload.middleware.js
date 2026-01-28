@@ -1,17 +1,18 @@
-const multer = require("multer")
-const path = require("path")
-const config = require("../config")
+const multer = require('multer');
+const path = require('path');
+const config = require('../config');
 
 
 const storage = multer.diskStorage({
-    destination: (_, file, cb) => {
-        cb(null, './uploads/')
-    },
-    filename: (_, file, cb) => {
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`
-        cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`)
-    }
-})
+  destination: (_, file, cb) => {
+    cb(null, path.join(process.cwd(), 'uploads'));
+  },
+  filename: (_, file, cb) => {
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+    cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
+  }
+});
+
 
 const fileFilter = (_, file, cb) => {
   const allowedMimes = ['application/pdf'];
@@ -24,12 +25,11 @@ const fileFilter = (_, file, cb) => {
 };
 
 const upload = multer({
-    storage,
-    fileFilter,
-    limits: {
-        fieldSize: config.maxFileSize
-    }
-})
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: config.maxFileSize
+  }
+});
 
-
-module.exports = upload
+module.exports = upload;

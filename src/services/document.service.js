@@ -10,7 +10,7 @@ class DocumentService {
     async processDocument(filepath) {
         try {
 
-            const dataBuffer = await fs.readFile()
+            const dataBuffer = await fs.readFile(filepath)
 
             const pdfData = await pdfParse(dataBuffer)
             const extractedText = pdfData.text;
@@ -19,7 +19,7 @@ class DocumentService {
                 throw new Error("No text found in the pdf doc.")
             }
 
-            console.log('extracted text from pdf doc.: ', `${extractedText.subString(0, 100)}...`)
+            console.log('extracted text from pdf doc.: ', `${extractedText.substring(0, 100)}...`)
 
             const result = await this.mistralService.extractFromText(extractedText)
 
@@ -27,8 +27,10 @@ class DocumentService {
 
         } catch (error) {
             console.log('error: ', error)
+            throw error
         } finally {
             await this.deleteFile(filepath)
+            console.log('finally')
         }
     }
 

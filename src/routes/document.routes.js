@@ -1,12 +1,13 @@
-const express = require("express")
-const DocumentController = require("../controllers/document.controller")
-const upload = require("../middleware/upload.middleware")
+const express = require('express');
+const { extractDocument, healthCheck } = require('../controllers/document.controller');
+const upload = require('../middleware/upload.middleware');
 
-const router = express.Router()
-const documentController = new DocumentController()
+const router = express.Router();
 
-router.post('/extract', upload.single('document'), documentController.extractDocument)
+// Extract document endpoint
+router.post('/extract', upload.single('document'), extractDocument);
 
-router.get('/health', documentController.healthCheck)
+// Health check
+router.get('/health', healthCheck);
 
-module.exports = router
+module.exports = router;
