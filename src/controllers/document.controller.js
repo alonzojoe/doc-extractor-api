@@ -42,4 +42,4 @@ class DocumentController {
     }
 }
 
-module.exports = DocumentController()
+module.exports = DocumentController;
