@@ -1,14 +1,14 @@
-const config = require('../config');
+const config = require('../config')
 
 class MistralService {
   constructor() {
-    this.apiKey = config.mistralApiKey;
-    this.baseUrl = 'https://api.mistral.ai/v1';
-    this.model = 'pixtral-12b-2409';
+    this.apiKey = config.mistralApiKey
+    this.baseUrl = 'https://api.mistral.ai/v1'
+    this.model = 'pixtral-12b-2409'
   }
 
   async extractFromText(text) {
-    const prompt = this.buildExtractionPrompt(text);
+    const prompt = this.buildExtractionPrompt(text)
     
     const messages = [
       {
@@ -19,10 +19,10 @@ class MistralService {
         role: 'user',
         content: prompt
       }
-    ];
+    ]
 
-    const response = await this.callMistralAPI(messages);
-    return this.parseResponse(response);
+    const response = await this.callMistralAPI(messages)
+    return this.parseResponse(response)
   }
 
   buildExtractionPrompt(text) {
@@ -43,7 +43,7 @@ class MistralService {
             },
             "confidence": 0.95
             }
-            Return ONLY the JSON object, no other text.`;
+            Return ONLY the JSON object, no other text.`
   }
 
   async callMistralAPI(messages) {
@@ -59,41 +59,41 @@ class MistralService {
         temperature: 0.1,
         max_tokens: 2000
       })
-    });
+    })
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`Mistral API error: ${error.message || response.statusText}`);
+      const error = await response.json()
+      throw new Error(`Mistral API error: ${error.message || response.statusText}`)
     }
 
-    return response.json();
+    return response.json()
   }
 
   parseResponse(response) {
-    const content = response.choices[0]?.message?.content;
+    const content = response.choices[0]?.message?.content
     
     if (!content) {
-      throw new Error('No content in Mistral response');
+      throw new Error('No content in Mistral response')
     }
 
     try {
       const cleanContent = content
         .replace(/```json\n?/g, '')
         .replace(/```\n?/g, '')
-        .trim();
+        .trim()
 
-      const parsed = JSON.parse(cleanContent);
+      const parsed = JSON.parse(cleanContent)
       
       if (!parsed.extractedFields) {
-        throw new Error('Invalid response format: missing extractedFields');
+        throw new Error('Invalid response format: missing extractedFields')
       }
 
-      return parsed;
+      return parsed
     } catch (error) {
-      console.error('Failed to parse Mistral response:', content);
-      throw new Error(`Failed to parse extraction result: ${error.message}`);
+      console.error('Failed to parse Mistral response:', content)
+      throw new Error(`Failed to parse extraction result: ${error.message}`)
     }
   }
 }
 
-module.exports = MistralService;
+module.exports = MistralService
