@@ -31,7 +31,7 @@ class MistralService {
             ${text}
             Please extract:
             - Document type (invoice, receipt, contract, etc.)
-            - All key fields (dates, amounts, names, addresses, etc.)
+            - All key fields (dates, amounts, names, addresses, table, etc.)
             - Line items if present
             - Any other relevant information
 
