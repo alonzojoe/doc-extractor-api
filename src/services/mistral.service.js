@@ -7,6 +7,7 @@ class MistralService {
     this.model = 'pixtral-12b-2409'
   }
 
+
   async extractFromText(text) {
     const prompt = this.buildExtractionPrompt(text)
     
@@ -25,24 +26,68 @@ class MistralService {
     return this.parseResponse(response)
   }
 
+
+  async extractFromImage(base64Image, mimeType) {
+    const messages = [
+      {
+        role: 'system',
+        content: 'You are a document extraction AI. Extract structured data from document images and return ONLY valid JSON. Do not include any explanation or markdown formatting.'
+      },
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: `Extract all relevant information from this document image and return it as a JSON object.
+                   Please extract:
+                   - Document type (invoice, receipt, contract, etc.)
+                   - All key fields (dates, amounts, names, addresses, tables, etc.)
+                   - Line items if present
+                   - Any other relevant information
+ 
+                   Return the data in this JSON format:
+                   {
+                     "documentType": "type_here",
+                     "extractedFields": {
+                       // all extracted fields here
+                     },
+                     "confidence": 0.95
+                   }
+ 
+                   Return ONLY the JSON object, no other text.`
+          },
+          {
+            type: 'image_url',
+            image_url: `data:${mimeType};base64,${base64Image}`
+          }
+        ]
+      }
+    ]
+
+    const response = await this.callMistralAPI(messages)
+    return this.parseResponse(response)
+  }
+
   buildExtractionPrompt(text) {
     return `Extract all relevant information from the following document and return it as a JSON object.
             Document content:
             ${text}
+
             Please extract:
             - Document type (invoice, receipt, contract, etc.)
-            - All key fields (dates, amounts, names, addresses, table, etc.)
+            - All key fields (dates, amounts, names, addresses, tables, etc.)
             - Line items if present
             - Any other relevant information
 
             Return the data in this JSON format:
             {
-            "documentType": "type_here",
-            "extractedFields": {
+              "documentType": "type_here",
+              "extractedFields": {
                 // all extracted fields here
-            },
-            "confidence": 0.95
+              },
+              "confidence": 0.95
             }
+
             Return ONLY the JSON object, no other text.`
   }
 

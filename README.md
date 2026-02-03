@@ -113,7 +113,7 @@ curl -X POST http://localhost:3000/api/documents/extract \
 ## 📁 Project Structure
 
 ```
-backend/
+doc-extractor-api/
 ├── src/
 │   ├── config/
 │   │   └── index.js          # Environment configuration
